@@ -9,10 +9,10 @@ var client = new Client();
 const fs = require('fs');
 const https = require('https');
 
-var server = https.createServer({
+/*var server = https.createServer({
   key: fs.readFileSync(__dirname + '/server.key'),
   cert: fs.readFileSync(__dirname + '/server.cert')
-}, app);
+}, app);*/
 
 // Cors
 app.use(cors());
@@ -62,13 +62,13 @@ app.post('/register', function (req, res) {
 
 app.post('/login', function (req, res) {
 
-    if (!req.session.logged){
+    if (req.session.logged == false){
 
         var username = req.body.username;
         var password = req.body.password;
 
         mongo.login({
-                user : username,
+                username : username,
                 password : password,
             })
         .then(result => {
@@ -79,10 +79,11 @@ app.post('/login', function (req, res) {
                 req.session.logged = false;
                 res.send(false);
             }
+            
         });
 
     }else{
-        res.send('Already logged');
+        res.send(false);
     }
 
 });
@@ -105,9 +106,13 @@ app.get('/delete', function (req, res) {
 });
 
 
-server.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.listen(8080, function () {
+  console.log('Example app listening on port 8080!');
 });
+
+/*server.listen(8080, function () {
+  console.log('Example app listening on port 8080!');
+});*/
 
 
 ///////////// functions
