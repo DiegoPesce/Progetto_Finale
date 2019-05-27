@@ -9,10 +9,12 @@ var client = new Client();
 const fs = require('fs');
 const https = require('https');
 
-/*var server = https.createServer({
+/*
+var server = https.createServer({
   key: fs.readFileSync(__dirname + '/server.key'),
   cert: fs.readFileSync(__dirname + '/server.cert')
-}, app);*/
+}, app);
+*/
 
 // Cors
 app.use(cors());
@@ -79,7 +81,7 @@ app.post('/login', function (req, res) {
                 req.session.logged = false;
                 res.send(false);
             }
-            
+
         });
 
     }else{
@@ -105,14 +107,15 @@ app.get('/delete', function (req, res) {
     res.send("It works!");
 });
 
-
 app.listen(8080, function () {
   console.log('Example app listening on port 8080!');
 });
 
-/*server.listen(8080, function () {
+/*
+server.listen(8080, function () {
   console.log('Example app listening on port 8080!');
-});*/
+});
+*/
 
 
 ///////////// functions
