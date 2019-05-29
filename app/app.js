@@ -22,7 +22,9 @@ app.use(cors());
 // Session
 app.use(
     session({
-      secret: 'password'
+      secret: 'password',
+      resave: false,
+      saveUninitialized: false
     })
 );
 
@@ -63,9 +65,8 @@ app.post('/register', function (req, res) {
 });
 
 app.post('/login', function (req, res) {
-
-    if (req.session.logged == false){
-
+    console.log(req.session)
+    if (req.session.logged == false || req.session.logged == undefined){
         var username = req.body.username;
         var password = req.body.password;
 
@@ -76,9 +77,11 @@ app.post('/login', function (req, res) {
         .then(result => {
             if (result == 1) {
                 req.session.logged = true;
+                req.session.username = username;
                 res.send(true);
             }else{
                 req.session.logged = false;
+                req.session.username = username;
                 res.send(false);
             }
 
@@ -99,6 +102,16 @@ app.post('/unlock', function (req, res) {
             // raw response
             console.log(response);
         });
+    }
+});
+
+app.post('/logout', function (req, res) {
+    if(req.session.logged){
+        var username = req.body.username;
+
+        if(req.session.username == username){
+            req.session.logged = false;
+        }
     }
 });
 
