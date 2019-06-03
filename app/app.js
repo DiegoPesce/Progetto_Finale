@@ -65,8 +65,7 @@ app.post('/register', function (req, res) {
 });
 
 app.post('/login', function (req, res) {
-    console.log(req.session)
-    if (req.session.logged == false || req.session.logged == undefined){
+    //if (req.session.logged == false || req.session.logged == undefined){
         var username = req.body.username;
         var password = req.body.password;
 
@@ -87,14 +86,37 @@ app.post('/login', function (req, res) {
 
         });
 
-    }else{
-        res.send(false);
-    }
+    //}else{
+        //res.send(false);
+    //}
+
+});
+
+app.get('/getMonopattini', function (req, res) {
+    //if (req.session.logged == false || req.session.logged == undefined){
+        mongo.getMonopattini()
+        .then(result => {
+            console.log(result)
+            if (result) {
+                req.session.logged = true;
+                res.send(result);
+            }else{
+                req.session.logged = false;
+                res.send(false);
+            }
+
+        }).catch(err =>{
+            throw err;
+        });
+
+    //}else{
+        //res.send(false);
+    //}
 
 });
 
 app.post('/unlock', function (req, res) {
-    if(req.session.logged){
+    //if(req.session.logged){
         var qr = req.body.qr;
         client.post(url + '/unlock', qr, function (data, response) {
             // parsed response body as js object
@@ -102,17 +124,17 @@ app.post('/unlock', function (req, res) {
             // raw response
             console.log(response);
         });
-    }
+    //}
 });
 
 app.post('/logout', function (req, res) {
-    if(req.session.logged){
+    //if(req.session.logged){
         var username = req.body.username;
 
         if(req.session.username == username){
             req.session.logged = false;
         }
-    }
+    //}
 });
 
 app.get('/delete', function (req, res) {
