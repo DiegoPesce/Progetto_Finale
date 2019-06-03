@@ -127,6 +127,18 @@ app.post('/unlock', function (req, res) {
     //}
 });
 
+app.post('/prenota', function (req, res) {
+    //if(req.session.logged){
+        var qr = req.body.qr;
+        client.post(url + '/unlock', qr, function (data, response) {
+            // parsed response body as js object
+            console.log(data);
+            // raw response
+            console.log(response);
+        });
+    //}
+});
+
 app.post('/logout', function (req, res) {
     //if(req.session.logged){
         var username = req.body.username;
