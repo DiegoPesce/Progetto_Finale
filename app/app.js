@@ -35,6 +35,7 @@ app.use(bodyparser.urlencoded());
 app.use(bodyparser.json());
 
 app.get('/', function (req, res) {
+    req.session.
     res.send("It works!");
 });
 
@@ -132,7 +133,7 @@ app.put('/prenota', function (req, res) {
         var username = req.body.username;
         mongo.prenota(qr, username).then( result=>
         {
-            if(result){  
+            if(result){
                 //set session prenotazione
                 res.send(true);
             }else{
