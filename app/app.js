@@ -96,7 +96,6 @@ app.get('/getMonopattini', function (req, res) {
     //if (req.session.logged == false || req.session.logged == undefined){
         mongo.getMonopattini()
         .then(result => {
-            console.log(result)
             if (result) {
                 req.session.logged = true;
                 res.send(result);
@@ -127,14 +126,18 @@ app.post('/unlock', function (req, res) {
     //}
 });
 
-app.post('/prenota', function (req, res) {
+app.put('/prenota', function (req, res) {
     //if(req.session.logged){
         var qr = req.body.qr;
-        client.post(url + '/unlock', qr, function (data, response) {
-            // parsed response body as js object
-            console.log(data);
-            // raw response
-            console.log(response);
+        var username = req.body.username;
+        mongo.prenota(qr, username).then( result=>
+        {
+            if(result){  
+                //set session prenotazione
+                res.send(true);
+            }else{
+                res.send(false);
+            }
         });
     //}
 });
