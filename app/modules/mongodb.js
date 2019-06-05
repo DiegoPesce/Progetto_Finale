@@ -47,7 +47,7 @@ module.exports = {
         });
     },
 
-    prenota: (qr, username) => {
+    prenota: (qr, username, data) => {
         return new Promise((resolve, reject) => {
             mongodb.connect(url, function(err, db) {
                 if (err) throw err;
@@ -56,11 +56,30 @@ module.exports = {
                     .updateOne({ qr: qr, disponibilita: true }, {
                         $push: {
                             "prenotazioni": {
-                                username: username, data: new Date()
+                                username: username, data: data
                             }
                         },
                         $set: {
                             disponibilita: false
+                        }
+                    }, function(err, res) {
+                        if (err) reject(err);
+                        db.close();
+                        resolve(res);
+                    });
+            });
+        });
+    },
+    rilascia: (qr, username, data) => {
+        return new Promise((resolve, reject) => {
+            mongodb.connect(url, function(err, db) {
+                if (err) throw err;
+                var dbo = db.db("Progetto_Finale");
+                dbo.collection("Monopattini")
+                    .updateOne({ qr: qr, disponibilita: false, "prenotazioni.data": data }, {
+                        $set: {
+                            disponibilita: true,
+                            "prenotazioni.$.dataRilascio":new Date()
                         }
                     }, function(err, res) {
                         if (err) reject(err);
