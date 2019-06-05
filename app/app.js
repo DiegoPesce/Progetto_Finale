@@ -35,7 +35,6 @@ app.use(bodyparser.urlencoded());
 app.use(bodyparser.json());
 
 app.get('/', function (req, res) {
-    req.session.
     res.send("It works!");
 });
 
